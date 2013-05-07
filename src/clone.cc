@@ -1,6 +1,6 @@
 //#define BUILDING_NODE_EXTENSION
-#include <node/node.h>
-#include <node/v8.h>
+#include <node.h>
+#include <v8.h>
 
 using namespace node;
 using namespace v8;

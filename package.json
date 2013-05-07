@@ -1,0 +1,27 @@
+{
+  "name": "native-deep-extend",
+  "version": "0.0.1",
+  "description": "c++ implementation of deep-extend module",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js",
+    "install": "node-gyp rebuild"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/up2beer/native-deep-extend.git"
+  },
+  "keywords": [
+    "deep",
+    "extend"
+  ],
+  "devDepends": {
+    "deep-extend": "*",
+    "assert": "*"
+  },
+  "author": "Vladimir Bulyga <xx@ccxx.cc>",
+  "license": "BSD",
+  "gypfile": true,
+  "readmeFilename": "README.md",
+  "gitHead": "116c168636b72abb3e4238095700a133e36e29c4"
+}
