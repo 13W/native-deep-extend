@@ -10,5 +10,5 @@ def configure(conf):
 def build(bld):
   ext = bld.new_task_gen("cxx", "shlib", "node_addon")
   ext.cxxflags = ["-I./src/", "-g", "-Wall"]
-  ext.source = "./src/clone.cc"
-  ext.target = "clone"
+  ext.source = "./src/extend.cc"
+  ext.target = "extend"

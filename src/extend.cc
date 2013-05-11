@@ -122,5 +122,5 @@ extern "C" {
           FunctionTemplate::New(Extend)->GetFunction());
     }
 
-    NODE_MODULE(addon, init)
+    NODE_MODULE(extend, init)
 }

@@ -1,11 +1,11 @@
 {
   "name": "native-deep-extend",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "c++ implementation of deep-extend module",
   "main": "index.js",
   "scripts": {
     "test": "node test.js",
-    "install": "node-gyp rebuild"
+    "preinstall": "node-gyp rebuild"
   },
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
     "deep",
     "extend"
   ],
-  "devDepends": {
+  "devDependencies": {
     "deep-extend": "*",
     "assert": "*"
   },

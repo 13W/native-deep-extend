@@ -1,1 +1,1 @@
-module.exports = require('./build/Release/clone.node');
+module.exports = require('./build/Release/extend.node');

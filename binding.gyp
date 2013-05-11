@@ -1,8 +1,8 @@
 {
   "targets": [
     {
-      "target_name": "clone",
-      "sources": [ "src/clone.cc" ]
+      "target_name": "extend",
+      "sources": [ "src/extend.cc" ]
     }
   ]
 }

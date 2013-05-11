@@ -7,7 +7,7 @@
 var fs = require('fs'),
     assert = require('assert'),
     jsExtend = require('deep-extend'),
-    naExtend = require('./build/Release/clone.node').extend;
+    naExtend = require('./').extend;
 
 function test() {
     var args = [].slice.call(arguments),
