@@ -49,7 +49,8 @@ void ArrayExtend(Local<Array>target, Local<Array>source) {
                 target->Set(arrayIndex, Local<Object>::Cast(source->Get(arrayIndex))->Clone());
             }
             ObjectExtend(Local<Object>::Cast(target->Get(arrayIndex)), Local<Object>::Cast(source->Get(arrayIndex)));
-        } else {
+        } else 
+        if (!source->Get(arrayIndex)->IsUndefined()){
             target->Set(arrayIndex, source->Get(arrayIndex));
         }
     }
@@ -73,7 +74,8 @@ void ObjectExtend(Local<Object>target, Local<Object>source) {
                 target->Set(keyName, Local<Object>::Cast(source->Get(keyName))->Clone());
             }
             ObjectExtend(Local<Object>::Cast(target->Get(keyName)), Local<Object>::Cast(source->Get(keyName)));
-        } else {
+        } else 
+        if (!source->Get(keyName)->IsUndefined()){
             target->Set(keyName, source->Get(keyName));
         }
     }
