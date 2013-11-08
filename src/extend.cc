@@ -12,8 +12,8 @@ Local<Value> Clone(Local<Value> target) {
     if(target->IsFunction()) {result = Local<Value>::New(Local<Function>::Cast(target)->Clone());} else 
     if(target->IsArray()) {result = Local<Value>::New(Local<Array>::Cast(target)->Clone());} else
     if(target->IsDate()) {result = Local<Value>::New(Local<Date>::Cast(target)->Clone());} else
-    if(target->IsObject()) {result = Local<Value>::New(Local<Object>::Cast(target)->Clone());}// else
-    if(target->IsStringObject()) {result = Local<Value>::New(Local<StringObject>::Cast(target)->Clone());}
+    if(target->IsObject()) {result = Local<Value>::New(Local<Object>::Cast(target)->Clone());} else
+    if(target->IsStringObject()) {result = Local<Value>::New(Local<StringObject>::Cast(target)->Clone());} else
 //    if(target->IsBoolean()) {result = Local<Boolean>::Cast(target);} else
     if(target->IsBooleanObject()) {result = Local<Value>::New(Local<BooleanObject>::Cast(target)->Clone());} else
 //    if(target->IsExternal()) {result = Local<External>::Cast(target);} else
@@ -43,24 +43,22 @@ void ArrayExtend(Local<Array>target, Local<Array>source) {
                 target->Set(arrayIndex, Local<Array>::Cast(source->Get(arrayIndex))->Clone());
             }
             ArrayExtend(Local<Array>::Cast(target->Get(arrayIndex)), Local<Array>::Cast(source->Get(arrayIndex)));
-        } else
-        if (source->Get(arrayIndex)->IsObject()) {
+        } else if (source->Get(arrayIndex)->IsObject()) {
             if (!target->Get(arrayIndex)->IsObject()) {
                 target->Set(arrayIndex, Local<Object>::Cast(source->Get(arrayIndex))->Clone());
             }
             ObjectExtend(Local<Object>::Cast(target->Get(arrayIndex)), Local<Object>::Cast(source->Get(arrayIndex)));
-        } else 
-        if (!source->Get(arrayIndex)->IsUndefined()){
-            target->Set(arrayIndex, source->Get(arrayIndex));
+        } else if (!source->Get(arrayIndex)->IsUndefined()){
+            target->Set(arrayIndex, Clone(source->Get(arrayIndex)));
         }
     }
 };
 
 void ObjectExtend(Local<Object>target, Local<Object>source) {
     Local<Array> keys = source->GetOwnPropertyNames();
-    const uint32_t keyLength = keys->Length();
+    const int keyLength = keys->Length();
     
-    for (uint32_t i = 0; i < keyLength; i++) {
+    for (int i = 0; i < keyLength; i++) {
         Handle<Value> keyName = Handle<String>::Cast(keys->Get(Integer::New(i)));
         
         if (source->Get(keyName)->IsArray()) {
@@ -68,15 +66,13 @@ void ObjectExtend(Local<Object>target, Local<Object>source) {
                 target->Set(keyName, Local<Array>::Cast(source->Get(keyName))->Clone());
             }
             ArrayExtend(Local<Array>::Cast(target->Get(keyName)), Local<Array>::Cast(source->Get(keyName)));
-        } else 
-        if (source->Get(keyName)->IsObject()) {
+        } else if (source->Get(keyName)->IsObject()) {
             if(!target->Get(keyName)->IsObject()) {
                 target->Set(keyName, Local<Object>::Cast(source->Get(keyName))->Clone());
             }
             ObjectExtend(Local<Object>::Cast(target->Get(keyName)), Local<Object>::Cast(source->Get(keyName)));
-        } else 
-        if (!source->Get(keyName)->IsUndefined()){
-            target->Set(keyName, source->Get(keyName));
+        } else if (!source->Get(keyName)->IsUndefined()){
+            target->Set(keyName, Clone(source->Get(keyName)));
         }
     }
 }
@@ -88,19 +84,18 @@ Handle<Value> Extend(const Arguments& args) {
     if (argc == 1) {
         if(target->IsArray()) {
             ArrayExtend(Local<Array>::Cast(Local<Array>::Cast(target)->Clone()), Local<Array>::Cast(target));
-        } else
-        if (target->IsObject()) {
+        } else if (target->IsObject()) {
             ObjectExtend(Local<Object>::Cast(target)->Clone(), Local<Object>::Cast(target));
         }
-    } else
-    if (!(target->IsObject() || target->IsArray())) return scope.Close(Boolean::New(false));
-    else
-    for (int i = 1; i < argc; i++) {
-        if (args[i]->IsObject() && target->IsObject()) {
-            ObjectExtend(Local<Object>::Cast(target), Local<Object>::Cast(args[i]));
-        } else
-        if (args[i]->IsArray() && target->IsArray()) {
-            ArrayExtend(Local<Array>::Cast(target), Local<Array>::Cast(args[i]));
+    } else if (!(target->IsObject() || target->IsArray())) {
+        return scope.Close(Clone(target));
+    } else {
+        for (int i = 1; i < argc; i++) {
+            if (args[i]->IsObject() && target->IsObject()) {
+                ObjectExtend(Local<Object>::Cast(target), Local<Object>::Cast(args[i]));
+            } else if (args[i]->IsArray() && target->IsArray()) {
+                ArrayExtend(Local<Array>::Cast(target), Local<Array>::Cast(args[i]));
+            }
         }
     }
     return scope.Close(target);
